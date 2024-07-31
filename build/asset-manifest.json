@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.8203adc1.css",
+    "main.js": "/static/js/main.211cecb3.js",
+    "static/js/787.e8223466.chunk.js": "/static/js/787.e8223466.chunk.js",
+    "static/media/paypal-bgg.png": "/static/media/paypal-bgg.68b04f110b8b0c3a5258.png",
+    "static/media/filterBtn.png": "/static/media/filterBtn.bdf0763c32ed0966f8ae.png",
+    "static/media/rev.png": "/static/media/rev.88aa8dfa5b1c8cf54b51.png",
+    "static/media/ab.gif": "/static/media/ab.4499f4ee91be655a5286.gif",
+    "static/media/rules.png": "/static/media/rules.6a5af944a6e0a103712c.png",
+    "static/media/av.png": "/static/media/av.51479370decaaad58199.png",
+    "static/media/wal.png": "/static/media/wal.2432ba613b5d54790862.png",
+    "static/media/pic.png": "/static/media/pic.516a8558af3b1542dadd.png",
+    "static/media/paypalbg.png": "/static/media/paypalbg.424785183cf4b6b3428c.png",
+    "index.html": "/index.html",
+    "main.8203adc1.css.map": "/static/css/main.8203adc1.css.map",
+    "main.211cecb3.js.map": "/static/js/main.211cecb3.js.map",
+    "787.e8223466.chunk.js.map": "/static/js/787.e8223466.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8203adc1.css",
+    "static/js/main.211cecb3.js"
+  ]
+}

@@ -10,7 +10,7 @@ const Footer1 = () => {
         <p className='footer-things font-bold text-2xl uppercase'>Things To Know, </p>
 
         <div className='footer-hold'>
-            <img src={rules} className="footer-pic" />
+            <img alt='asdf' src={rules} className="footer-pic" />
         </div>
     </div>
   )

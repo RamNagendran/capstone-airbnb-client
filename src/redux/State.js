@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { configureStore } from "@reduxjs/toolkit";
-import { useState } from "react";
 
 
 const counterSlice = createSlice({

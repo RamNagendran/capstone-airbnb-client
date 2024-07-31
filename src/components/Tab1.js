@@ -1,5 +1,5 @@
-import React from 'react'
-import { placesStore } from '../store/Store'
+import React from 'react';
+import { placesStore } from '../store/Store';
 import "../styles/Tab1.css";
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -8,31 +8,25 @@ import 'swiper/css/navigation';
 import 'swiper/css/bundle';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { FiHeart } from "react-icons/fi"
-import { IoBedOutline } from "react-icons/io5"
-import { GiBathtub } from "react-icons/gi"
-import { BsStars } from "react-icons/bs"
-import { BiBuildingHouse } from "react-icons/bi"
+import { FiHeart } from "react-icons/fi";
+import { IoBedOutline } from "react-icons/io5";
+import { GiBathtub } from "react-icons/gi";
+import { BsStars } from "react-icons/bs";
+import { BiBuildingHouse } from "react-icons/bi";
 import { Pagination } from "swiper";
 
-
-//TAB 1 = TROPICAL 
-
-
+// TAB 1 = TROPICAL
 
 const Tab1 = ({ pushDown }) => {
-
 
     return (
         <div>
             <div className='tab1-hold flex justify-center md:mb-48 mb-28 items-center sm:gap-12 gap-0 -mt-16 flex-wrap w-full'>
-                {placesStore.map((item => {
+                {placesStore.map((item) => {
                     if (item.type === "tropical") {
                         return (
                             <div className='card boxsh' key={item.id}>
-
                                 <Link to={`/${item.id}`}>
-
                                     <Swiper
                                         spaceBetween={5}
                                         slidesPerView={1}
@@ -48,70 +42,51 @@ const Tab1 = ({ pushDown }) => {
                                             clickable: true,
                                         }}
                                         modules={[Pagination]}
-
                                     >
                                         <SwiperSlide>
-                                            <img src={item.homeMainPic} className="cardImg" />
+                                            <img src={item.homeMainPic} className="cardImg" alt={`Main view of ${item.name}`} />
                                         </SwiperSlide>
-
                                         <SwiperSlide>
-                                            <img src={item.carouselPic1} className="cardImg" />
+                                            <img src={item.carouselPic1} className="cardImg" alt={`Carousel view 1 of ${item.name}`} />
                                         </SwiperSlide>
-
                                         <SwiperSlide>
-                                            <img src={item.carouselPic2} className="cardImg" />
+                                            <img src={item.carouselPic2} className="cardImg" alt={`Carousel view 2 of ${item.name}`} />
                                         </SwiperSlide>
-
                                         <SwiperSlide>
-                                            <img src={item.carouselPic3} className="cardImg" />
+                                            <img src={item.carouselPic3} className="cardImg" alt={`Carousel view 3 of ${item.name}`} />
                                         </SwiperSlide>
-
                                         <SwiperSlide>
-                                            <img src={item.carouselPic4} className="cardImg" />
+                                            <img src={item.carouselPic4} className="cardImg" alt={`Carousel view 4 of ${item.name}`} />
                                         </SwiperSlide>
-
                                         <SwiperSlide>
-                                            <img src={item.carouselPic5} className="cardImg" />
+                                            <img src={item.carouselPic5} className="cardImg" alt={`Carousel view 5 of ${item.name}`} />
                                         </SwiperSlide>
-
                                     </Swiper>
-
                                     {item.pets && <div className='flex label'> <BsStars /> POPULAR </div>}
-
                                     <div className='flex gap-0 pl-3 pr-3 justify-between'>
-
                                         <div className='flex'>
-                                            <p className=' text-violet-600 font-semibold mr-1 text-2xl'> ${item.price.toLocaleString()}</p>
+                                            <p className='text-violet-600 font-semibold mr-1 text-2xl'> ${item.price.toLocaleString()}</p>
                                             <p className='text-gray-400 text-sm pt-2'> /month </p>
                                         </div>
-
-                                        <FiHeart className='text-sm heartCrad  boxsh' />
-
+                                        <FiHeart className='text-sm heartCrad boxsh' />
                                     </div>
-
                                     <p className='text-2xl pl-3'> {item.name} </p>
-
                                     <p className='text-gray-400 text-sm pl-3 mb-3 mt-2'> 2699 Green Valley hughland lake ... </p>
                                     <hr className='mb-4' />
-
                                     <div className='flex justify-center pl-2 gap-4 md:gap-3'>
-                                        <span className='flex items-center'> <IoBedOutline className=' md:text-2xl text-xl mr-2' /> <p className='text-sm text-gray-400 w-16'>{Math.floor(Math.random() * 5) + 2} beds </p></span>
-                                        <span className='flex items-center'> <GiBathtub className=' md:text-2xl text-xl mr-2' /> <p className='text-sm text-gray-400 w-16'>{Math.floor(Math.random() * 5) + 2} bath </p> </span>
-                                        <span className='flex items-center'> <BiBuildingHouse className=' md:text-2xl text-xl mr-2' /> <p className='text-sm text-gray-400 w-16'> {Math.floor(Math.random() * 2) + 2} floors </p></span>
-
+                                        <span className='flex items-center'> <IoBedOutline className='md:text-2xl text-xl mr-2' /> <p className='text-sm text-gray-400 w-16'>{Math.floor(Math.random() * 5) + 2} beds </p></span>
+                                        <span className='flex items-center'> <GiBathtub className='md:text-2xl text-xl mr-2' /> <p className='text-sm text-gray-400 w-16'>{Math.floor(Math.random() * 5) + 2} bath </p> </span>
+                                        <span className='flex items-center'> <BiBuildingHouse className='md:text-2xl text-xl mr-2' /> <p className='text-sm text-gray-400 w-16'> {Math.floor(Math.random() * 2) + 2} floors </p></span>
                                     </div>
-
                                 </Link>
                             </div>
-                        )
+                        );
                     }
-
-                }))}
+                    return null;
+                })}
             </div>
-
-        </div >
-    )
+        </div>
+    );
 }
 
-export default Tab1
-//
+export default Tab1;

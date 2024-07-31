@@ -3,16 +3,13 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
 import { useState } from 'react';
-import { differenceInDays } from 'date-fns'
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 const CalendarNavBar = () => {
-
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
-    const data = daysCheck;
+
+
 
     const handleSelect = (ranges) => {
         setStartDate(ranges.selection.startDate);
@@ -23,7 +20,6 @@ const CalendarNavBar = () => {
         endDate: endDate,
         key: "selection"
     }
-    var daysCheck = differenceInDays(endDate, startDate);
 
 
     return (

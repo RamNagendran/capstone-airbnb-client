@@ -3,8 +3,6 @@ import GooglePayButton from "@google-pay/button-react";
 import "../styles/Card.css";
 import creditCard from "../styles/side.png"
 import wallet from "../styles/wal.png";
-import { Link } from 'react-router-dom';
-import { FaAirbnb } from "react-icons/fa";
 
 const Card = () => {
     return (
@@ -12,7 +10,7 @@ const Card = () => {
 
 
             <div className='gpayAsset1Hold flex justify-end'>
-                <img src={creditCard} className="cc" />
+                <img alt='sdf' src={creditCard} className="cc" />
             </div>
 
             <br />
@@ -64,7 +62,7 @@ const Card = () => {
 
             <br />
             <div className='gpayAsset2Hold hidden lg:block'>
-                <img src={wallet} className="wal" />
+                <img alt='sdf' src={wallet} className="wal" />
 
             </div>
 

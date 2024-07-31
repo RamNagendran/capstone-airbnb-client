@@ -11,6 +11,7 @@ const CalendarFunc = (props) => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
+    var daysCheck = differenceInDays(endDate, startDate);
 
     const data = daysCheck;
 
@@ -24,10 +25,8 @@ const CalendarFunc = (props) => {
         key: "selection"
     }
 
-    const storeId = props.placesId;
 
 
-    var daysCheck = differenceInDays(endDate, startDate);
 
 
     return (<div className='calendarHolder calendarHolder2'>
@@ -36,9 +35,9 @@ const CalendarFunc = (props) => {
 
         {props.buttonopenState && <button className='close-cal rounded-xl' onClick={props.closeFunc}>Close calendar</button>}
 
-        {daysCheck == 0 ? <p className={daysCheck == 0 ? "days-0" : "days-updated"}>days selected = 0</p> : <p className='days-updated'>{daysCheck} days selected</p>}
+        {daysCheck === 0 ? <p className={daysCheck === 0 ? "days-0" : "days-updated"}>days selected = 0</p> : <p className='days-updated'>{daysCheck} days selected</p>}
 
-        {daysCheck == 0 ? "" : <Link to={`/checkout/${props.placesId}/${daysCheck}`} state={{ data: data }}  > <button className={props.buttonCloseState === false ? "checkout-btn-after" : "checkout-btn"}>Proceed To checkout</button>  </Link>}
+        {daysCheck === 0 ? "" : <Link to={`/checkout/${props.placesId}/${daysCheck}`} state={{ data: data }}  > <button className={props.buttonCloseState === false ? "checkout-btn-after" : "checkout-btn"}>Proceed To checkout</button>  </Link>}
 
 
     </div>)

@@ -1,5 +1,4 @@
 import React from 'react'
-import { FaAirbnb } from "react-icons/fa";
 import "../styles/Home.css";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { useState } from 'react';
@@ -15,10 +14,6 @@ import { AiOutlineMinusCircle } from "react-icons/ai"
 import Select from 'react-select';
 import { IoLocationOutline } from "react-icons/io5";
 
-import { LoginSocialGoogle } from 'reactjs-social-login';
-import { StickyContainer, Sticky } from 'react-sticky';
-import GoogleButton from 'react-google-button'
-
 const Home = ({ toggle, setToggle }) => {
 
   const [inputValue, setInputeValue] = useState("");
@@ -31,9 +26,8 @@ const Home = ({ toggle, setToggle }) => {
 
   let [infants, setInfants] = useState(0);
 
-  const [verified, setVerified] = useState(false);
 
-  const [userimage, setUserImage] = useState("");
+  const userimage = "";
 
 
 
@@ -212,27 +206,27 @@ const Home = ({ toggle, setToggle }) => {
                           <div className='absolute z-50 tabContentPlaces'>
                             {inputValue === "" ? <> <div className='tabContent1Hold cursor-pointer'>
                               <Link to={`/location/usa`}>
-                                <img src='https://a0.muscache.com/pictures/f9ec8a23-ed44-420b-83e5-10ff1f071a13.jpg' className='tabContent1Image' />
+                                <img alt='dff' src='https://a0.muscache.com/pictures/f9ec8a23-ed44-420b-83e5-10ff1f071a13.jpg' className='tabContent1Image' />
                               </Link>
                               <Link to={`/location/europe`}>
-                                <img src='https://a0.muscache.com/im/pictures/7b5cf816-6c16-49f8-99e5-cbc4adfd97e2.jpg?im_w=320' className='tabContent1Image' />
+                                <img alt='dff' src='https://a0.muscache.com/im/pictures/7b5cf816-6c16-49f8-99e5-cbc4adfd97e2.jpg?im_w=320' className='tabContent1Image' />
                               </Link>
 
                               <Link to={`/location/london`}>
-                                <img src='https://a0.muscache.com/im/pictures/dbb2b5ef-2efe-4099-81ac-c7b957f384ed.jpg?im_w=320' className='tabContent1Image' />
+                                <img alt='dff' src='https://a0.muscache.com/im/pictures/dbb2b5ef-2efe-4099-81ac-c7b957f384ed.jpg?im_w=320' className='tabContent1Image' />
                               </Link>
 
                             </div>
 
                               <div className='secImages'>
                                 <Link to={`/location/canada`}>
-                                  <img src='https://a0.muscache.com/im/pictures/d77de9f5-5318-4571-88c7-e97d2355d20a.jpg?im_w=320' className='tabContent1Image' />
+                                  <img alt='dff' src='https://a0.muscache.com/im/pictures/d77de9f5-5318-4571-88c7-e97d2355d20a.jpg?im_w=320' className='tabContent1Image' />
                                 </Link>
                                 <Link to={`/location/italy`}>
-                                  <img src='https://a0.muscache.com/im/pictures/ebc5a343-8b76-4ae5-8700-eb5e9cec9243.jpg?im_w=320' className='tabContent1Image mr-1' />
+                                  <img alt='dff' src='https://a0.muscache.com/im/pictures/ebc5a343-8b76-4ae5-8700-eb5e9cec9243.jpg?im_w=320' className='tabContent1Image mr-1' />
                                 </Link>
                                 <Link to={`/location/kyiv`}>
-                                  <img src='https://a0.muscache.com/im/pictures/66355b01-4695-4db9-b292-c149c46fb1ca.jpg?im_w=320' className='tabContent1Image' />
+                                  <img alt='dff' src='https://a0.muscache.com/im/pictures/66355b01-4695-4db9-b292-c149c46fb1ca.jpg?im_w=320' className='tabContent1Image' />
                                 </Link>
                               </div>
 
@@ -260,6 +254,7 @@ const Home = ({ toggle, setToggle }) => {
                                     else if (item.place.toLocaleLowerCase().includes(inputValue)) {
                                       return item
                                     }
+                                    return null
                                   }).map((item) => {
                                     return (
                                       <div className='searcdisplayIndivitual'>
@@ -366,7 +361,7 @@ const Home = ({ toggle, setToggle }) => {
             <div className="block">
               <div className="inline relative">
                 {<button type="button" className="inline-flex items-center relative px-2 border rounded-full hover:shadow-lg">
-                  {userimage.length > 2 ? <img src={userimage} className="UserLoginImage ml-5" /> : <div className="block flex-grow-0 flex-shrink-0 h-10 w-12 pl-5">
+                  {userimage.length > 2 ? <img alt='dff' src={userimage} className="UserLoginImage ml-5" /> : <div className="block flex-grow-0 flex-shrink-0 h-10 w-12 pl-5">
                     <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation" focusable="false" style={{ display: 'block', height: '100%', width: '100%', fill: 'currentcolor' }}>
                       <path d="m16 .7c-8.437 0-15.3 6.863-15.3 15.3s6.863 15.3 15.3 15.3 15.3-6.863 15.3-15.3-6.863-15.3-15.3-15.3zm0 28c-4.021 0-7.605-1.884-9.933-4.81a12.425 12.425 0 0 1 6.451-4.4 6.507 6.507 0 0 1 -3.018-5.49c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5a6.513 6.513 0 0 1 -3.019 5.491 12.42 12.42 0 0 1 6.452 4.4c-2.328 2.925-5.912 4.809-9.933 4.809z" />
                     </svg>

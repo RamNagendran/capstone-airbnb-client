@@ -1,5 +1,5 @@
 import { Link, Navigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 
@@ -11,6 +11,7 @@ export default function LoginPage() {
         ev.preventDefault();
         try {
             const { data } = await axios.post('/login', { email, password });
+            console.log(data)
             alert('Login successful');
             setRedirect(true);
         } catch (e) {

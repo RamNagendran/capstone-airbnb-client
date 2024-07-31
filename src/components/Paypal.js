@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import "../styles/Paypal.css";
 import paypalbg from "../styles/paypalbg.png"
 import paypalCard from "../styles/paypal-bgg.png"
-import success from "../styles/ab.gif";
 import { PayPalButtons } from '@paypal/react-paypal-js';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
@@ -19,11 +18,11 @@ const Paypal = (props) => {
 
 
             <div className='paypalbghold hidden lg:block'>
-                <img src={paypalbg} className="paypalbg" />
+                <img alt='adsf' src={paypalbg} className="paypalbg" />
             </div>
 
             <div className='paypalCardHold'>
-                <img src={paypalCard} className="paypalcard" />
+                <img alt='adsf' src={paypalCard} className="paypalcard" />
 
             </div>
 
@@ -51,7 +50,7 @@ const Paypal = (props) => {
             </div>
 
             <div className='paypalLogo2'>
-                <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/553128/PayPal.svg' />
+                <img alt='adsf' src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/553128/PayPal.svg' />
             </div>
 
 

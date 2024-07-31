@@ -26,7 +26,7 @@ const Checkout = (props) => {
       <div className='place-datails-container absolute'>
 
         <Link to={`/${id}`}>
-          <img src={homeMainPic} className="rounded-xl w-48 absolute checkout-pic" />
+          <img alt='sdf' src={homeMainPic} className="rounded-xl w-48 absolute checkout-pic" />
           <p className='checkout-name'>{name}</p>
         </Link>
 
@@ -38,7 +38,7 @@ const Checkout = (props) => {
 
         <p className='absolute uppercase italic checkout-protected font-semibold'>Your booking is protected by</p>
 
-        <img src='https://a0.muscache.com/pictures/aircover/aircover-logo/original/56683a2f-f11b-43f6-8af7-a1b3861b2c85.svg' className='checkout-logo absolute w-32 left-12' />
+        <img alt='sdf' src='https://a0.muscache.com/pictures/aircover/aircover-logo/original/56683a2f-f11b-43f6-8af7-a1b3861b2c85.svg' className='checkout-logo absolute w-32 left-12' />
 
         <p className='checkout-line2 text-gray-300 whitespace-nowrap'>____________________________________________________________</p>
 

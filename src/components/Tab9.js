@@ -2,7 +2,6 @@ import React from 'react'
 
 import { placesStore } from '../store/Store'
 import "../styles/Tab1.css";
-import { AiFillStar } from "react-icons/ai"
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -49,27 +48,27 @@ const Tab9 = () => {
 
                                     >
                                         <SwiperSlide>
-                                            <img src={item.homeMainPic} className="cardImg" />
+                                            <img src={item.homeMainPic} className="cardImg" alt={`Main view of ${item.name}`} />
                                         </SwiperSlide>
 
                                         <SwiperSlide>
-                                            <img src={item.carouselPic1} className="cardImg" />
+                                            <img src={item.carouselPic1} className="cardImg" alt={`View 1 of ${item.name}`} />
                                         </SwiperSlide>
 
                                         <SwiperSlide>
-                                            <img src={item.carouselPic2} className="cardImg" />
+                                            <img src={item.carouselPic2} className="cardImg" alt={`View 2 of ${item.name}`} />
                                         </SwiperSlide>
 
                                         <SwiperSlide>
-                                            <img src={item.carouselPic3} className="cardImg" />
+                                            <img src={item.carouselPic3} className="cardImg" alt={`View 3 of ${item.name}`} />
                                         </SwiperSlide>
 
                                         <SwiperSlide>
-                                            <img src={item.carouselPic4} className="cardImg" />
+                                            <img src={item.carouselPic4} className="cardImg" alt={`View 4 of ${item.name}`} />
                                         </SwiperSlide>
 
                                         <SwiperSlide>
-                                            <img src={item.carouselPic5} className="cardImg" />
+                                            <img src={item.carouselPic5} className="cardImg" alt={`View 5 of ${item.name}`} />
                                         </SwiperSlide>
 
                                     </Swiper>
@@ -103,7 +102,7 @@ const Tab9 = () => {
                             </div>
                         )
                     }
-
+                    return null
                 }))}
             </div>
 
