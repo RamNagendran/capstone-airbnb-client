@@ -1,58 +1,64 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  async function registerUser(ev) {
-    ev.preventDefault();
+  const navigate = useNavigate();
+  const [registerDetails, setRegisterDetails] = useState({
+    username: '',
+    email: "",
+    newPassword: "",
+    confirmPassword: ""
+  })
+
+  async function register() {
+    const { username, email, newPassword, confirmPassword } = registerDetails;
+    if (username === "" && email === "" && newPassword === "" && confirmPassword === "") {
+      toast.error("Please enter valid user details", {
+        hideProgressBar: true
+      })
+      return;
+    }
+    if (confirmPassword !== newPassword) {
+      toast.error("New password and confirm password should be same", {
+        hideProgressBar: true
+      })
+      return;
+    }
+
     try {
-      await axios.post('/register', {
-        name,
-        email,
-        password,
-      });
-      alert('Registration successful. Now you can log in');
+      const result = await axios.post('/register', { username, email, password: newPassword })
+      if (result.status === 200) {
+        toast.success("User added successfully", {
+          hideProgressBar: true
+        })
+        navigate('/login')
+      }
     } catch (e) {
-      alert('Registration failed. Please try again later');
+      toast.error(`Something went wrong - ${e?.response?.data?.message}`, { 
+        hideProgressBar: true
+      })
     }
   }
+
   return (
-    <div style={{ marginTop: '1rem', flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-      <div style={{ marginBottom: '16rem' }}>
-        <h1 style={{ fontSize: '2.5rem', textAlign: 'center', marginBottom: '1rem' }}>Register</h1>
-        <form style={{ maxWidth: '24rem', margin: '0 auto' }} onSubmit={registerUser}>
-          <input
-            type="text"
-            placeholder="John Doe"
-            value={name}
-            onChange={ev => setName(ev.target.value)}
-            style={{ display: 'block', width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-          />
-          <input
-            type="email"
-            placeholder="your@email.com"
-            value={email}
-            onChange={ev => setEmail(ev.target.value)}
-            style={{ display: 'block', width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={ev => setPassword(ev.target.value)}
-            style={{ display: 'block', width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-          />
-          <button style={{ backgroundColor: '#3490dc', color: 'white', padding: '0.5rem 1rem', border: 'none', borderRadius: '0.25rem', cursor: 'pointer' }}>
-            Register
-          </button>
-          <div style={{ textAlign: 'center', padding: '0.5rem 0', color: '#6b7280' }}>
-            Already a member? <Link style={{ textDecoration: 'underline', color: 'black' }} to={'/login'}>Login</Link>
-          </div>
-        </form>
+    <div style={loginLayout} >
+      <div style={innerbox} >
+        <p style={{ marginTop: "25px", fontWeight: 700, fontSize: "18px" }} >Create your account here!!</p>
+        <input onChange={(e) => setRegisterDetails({ ...registerDetails, username: e.target.value })} style={inputField} placeholder="Enter your user name" />
+        <input onChange={(e) => setRegisterDetails({ ...registerDetails, email: e.target.value })} style={inputField} placeholder="Enter your email" />
+        <input onChange={(e) => setRegisterDetails({ ...registerDetails, newPassword: e.target.value })} style={inputField} placeholder="Enter your new password" type="password" />
+        <input onChange={(e) => setRegisterDetails({ ...registerDetails, confirmPassword: e.target.value })} style={inputField} placeholder="Enter your confirm password" type="password" />
+        <button style={loginBtn} onClick={register} >Register</button>
+        <p style={{ fontSize: "14px", fontWeight: 600, marginTop: "10px" }} >Already have an account? <span onClick={() => navigate('/login')} style={{ cursor: "pointer", color: "blue", marginLeft: "4px", fontWeight: 800 }}  >Login</span></p>
       </div>
     </div>
   );
 }
+
+
+const loginLayout = { display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#fff", height: "100vh", width: "100%" }
+const innerbox = { display: "flex", flexDirection: "column", alignItems: "center", height: "430px", width: "350px", border: "1px solid lightgrey", borderRadius: "10px", backgroundColor: "#f6f6f6" }
+const inputField = { marginTop: "25px", height: "35px", width: "75%", border: "1px solid lightgrey", borderRadius: "8px", padding: "0px 10px", outline: 0 }
+const loginBtn = { marginTop: "25px", height: "35px", width: "75%", fontSize: "18px", fontWeight: 700, color: "#fff", backgroundColor: "#9304ab", borderRadius: "8px" }

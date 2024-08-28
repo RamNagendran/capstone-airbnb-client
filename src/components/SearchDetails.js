@@ -2,17 +2,17 @@ import React from 'react'
 import "../styles/SearchDataPage.css"
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { placesStore } from '../store/Store';
 import { useState } from 'react';
 import filterbtn from "../styles/filterBtn.png"
 import { MdOutlinePets } from "react-icons/md"
 import { AiFillStar } from "react-icons/ai"
 import SearchPageFooter from './SearchPageFooter';
+import { useSelector } from 'react-redux';
 
 
 const SearchDetails = (props) => {
 
-
+    const {placesStore, reviewesArr} = useSelector(state => state.common);
     const [openFilter, setOpenFilter] = useState(false); // toggle the filter dropdowm
 
     const [openPets, setOpenPets] = useState(false);   // topggle the pets dropdown
@@ -24,23 +24,9 @@ const SearchDetails = (props) => {
     const params = useParams();
     const { loc } = params;
 
-    var placeDetailsArray = placesStore.filter((item) => item.location.toLocaleLowerCase().includes(loc.toLocaleLowerCase()));  // getting the details from the main array with filter and storing it in "placeDetailsArray" and then passing it on to "orignalArray" state
+    var placeDetailsArray = placesStore && placesStore?.filter((item) => item.location.toLocaleLowerCase().includes(loc.toLocaleLowerCase()));  // getting the details from the main array with filter and storing it in "placeDetailsArray" and then passing it on to "orignalArray" state
 
-    const [orignalArray, setOriginalArray] = useState(placeDetailsArray);
-
-
-    const reviewesArr = ["Light cosy room in a modern home. Cosy clean light room with single bed and Wi-Fi, Furniture in this room will be update to higher standards by the time of your stay.",
-        "Bright airy Studio apartment located on the Ground floor, a beautiful self-contained garden studio, located in the heart of historic Highgate Village.",
-        "The apartment is equipped with a double bed and a double sofa bed and can comfortably accommodate 2 adults."
-        , "The room has been newly decorated, Plenty of space for luggage, desk space for work. moreover the staff was very coopervative and helped us throughout the stay",
-        "Light cosy room in a modern home. Cosy clean light room with single bed and Wi-Fi, Furniture in this room will be update to higher standards by the time of your stay.",
-        "Bright airy Studio apartment located on the Ground floor, a beautiful self-contained garden studio, located in the heart of historic Highgate Village.",
-        "The apartment is equipped with a double bed and a double sofa bed and can comfortably accommodate 2 adults."
-        , "The room has been newly decorated, Plenty of space for luggage, desk space for work. moreover the staff was very coopervative and helped us throughout the stay",
-        "Bright airy Studio apartment located on the Ground floor, a beautiful self-contained garden studio, located in the heart of historic Highgate Village.",
-        "Bright airy Studio apartment located on the Ground floor, a beautiful self-contained garden studio, located in the heart of historic Highgate Village.",
-
-    ]
+    const [orignalArray, setOriginalArray] = useState(placeDetailsArray); 
 
     const openFilterHandler = () => {  // toggling the filter dropdown
         setOpenFilter(!openFilter)
@@ -191,7 +177,7 @@ const SearchDetails = (props) => {
 
             <div className='searchRevHold flex flex-col relative'>
 
-                {reviewesArr.slice(0, orignalArray.length).map((item) => {
+                {reviewesArr?.length > 0 && reviewesArr?.slice(0, orignalArray.length).map((item) => {
                     return (
                         <div key={Math.random()}>
                             <p className=' text-gray-500'> "{item}" </p>

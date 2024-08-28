@@ -1,5 +1,4 @@
 import React from 'react';
-import { placesStore } from '../store/Store';
 import "../styles/Tab1.css";
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -14,15 +13,17 @@ import { GiBathtub } from "react-icons/gi";
 import { BsStars } from "react-icons/bs";
 import { BiBuildingHouse } from "react-icons/bi";
 import { Pagination } from "swiper";
+import { useSelector } from 'react-redux';
 
 // TAB 1 = TROPICAL
 
 const Tab1 = ({ pushDown }) => {
+    const {placesStore} = useSelector(state => state.common);
 
     return (
         <div>
             <div className='tab1-hold flex justify-center md:mb-48 mb-28 items-center sm:gap-12 gap-0 -mt-16 flex-wrap w-full'>
-                {placesStore.map((item) => {
+                {placesStore && placesStore?.map((item) => {
                     if (item.type === "tropical") {
                         return (
                             <div className='card boxsh' key={item.id}>

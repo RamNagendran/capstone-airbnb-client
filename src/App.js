@@ -12,7 +12,11 @@ import SearchPageFooter from './components/SearchPageFooter';
 import LoginPage from './components/loginPage';
 import RegisterPage from './components/registerUser';
 import axios from 'axios';
-axios.defaults.baseURL = 'https://capstone-airbnb-server.onrender.com/api/';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import BookedSlots from './components/bookedSlots';
+
+axios.defaults.baseURL = 'http://localhost:4000/api/v1';
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -22,18 +26,19 @@ function App() {
       <main>
         <BrowserRouter>
           <Routes>
-            <Route path="/" exact element={<>  <Home toggle={open} setToggle={setOpen} /> <TabsComp toggle={open} setToggle={setOpen} />  <SearchPageFooter /> </>} />
+            <Route path="/" exact element={<>  <Home toggle={open} setToggle={setOpen} /> </>} >
+              <Route path='/' element={ <> <TabsComp toggle={open} setToggle={setOpen} />  <SearchPageFooter /></> } />
+              <Route path='/booked-slots' element={<> <BookedSlots /> <SearchPageFooter /> </>} />
+              <Route path="/:id" element={<SinglePage />} />
+              <Route path="/checkout/:id/:days" element={<Checkout />} />
+              <Route path="/location/:loc" element={<SearchDetails />} />
+            </Route>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register/user" element={<RegisterPage />} />
-            <Route path="/:id" element={<>  <Home /> <SinglePage /> </>} />
-            <Route path="/checkout/:id/:days" exact element={<> <Home />  <Checkout /> </>} />
-            <Route path="/location/:loc" exact element={<>  <Home /> <SearchDetails /> </>} />
           </Routes>
         </BrowserRouter>
       </main>
-
-
-
+      <ToastContainer />
     </div>
   );
 }

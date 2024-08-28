@@ -1,55 +1,61 @@
-import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { commonActions } from "../redux/State";
 
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [redirect, setRedirect] = useState(false);
-    async function handleLoginSubmit(ev) {
-        ev.preventDefault();
-        try {
-            const { data } = await axios.post('/login', { email, password });
-            console.log(data)
-            alert('Login successful');
-            setRedirect(true);
-        } catch (e) {
-            alert('Login failed');
+    const navigate = useNavigate();
+    const dispacth = useDispatch();
+
+    const [loginDetails, setLoginDetails] = useState({
+        username: '',
+        password: ''
+    })
+
+
+    async function login() {
+        const { username, password } = loginDetails;
+        if (username !== "" && password !== '') {
+            try {
+                const res = await axios.post('/login', { username, password })
+                if (res?.data) {
+                    dispacth(commonActions.setLoginDetails({ userDetails: res.data.userDetails, authToken: res.data.authToken }))
+                    toast.success('Logged in successfully', {
+                        hideProgressBar: true
+                    })
+                    navigate('/')
+                }
+            } catch (e) {
+                toast.error(`Something happened : ${e?.response?.data?.message}`, {
+                    hideProgressBar: true
+                })
+            }
+
+        } else {
+            toast.error('Please enter valid username and password', {
+                hideProgressBar: true
+            })
         }
     }
 
-    if (redirect) {
-        return <Navigate to={'/'} />
-    }
 
     return (
-        <div style={{ marginTop: '1rem', flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-            <div style={{ marginBottom: '16rem' }}>
-                <h1 style={{ fontSize: '2.5rem', textAlign: 'center', marginBottom: '1rem' }}>Login</h1>
-                <form style={{ maxWidth: '24rem', margin: '0 auto' }} onSubmit={handleLoginSubmit}>
-                    <input
-                        type="email"
-                        placeholder="your@email.com"
-                        value={email}
-                        onChange={ev => setEmail(ev.target.value)}
-                        style={{ display: 'block', width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-                    />
-                    <input
-                        type="password"
-                        placeholder="password"
-                        value={password}
-                        onChange={ev => setPassword(ev.target.value)}
-                        style={{ display: 'block', width: '100%', padding: '0.5rem', marginBottom: '1rem' }}
-                    />
-                    <button style={{ backgroundColor: '#3490dc', color: 'white', padding: '0.5rem 1rem', border: 'none', borderRadius: '0.25rem', cursor: 'pointer' }}>
-                        Login
-                    </button>
-                    <div style={{ textAlign: 'center', padding: '0.5rem 0', color: '#6b7280' }}>
-                        Don't have an account yet? <Link style={{ textDecoration: 'underline', color: 'black' }} to={'/register/user'}>Register now</Link>
-                    </div>
-                </form>
+        <div style={loginLayout} >
+            <div style={innerbox} >
+                <p style={{ marginTop: "25px", fontWeight: 700, fontSize: "18px" }} >Welcome back!!</p>
+                <input onChange={(e) => setLoginDetails({ ...loginDetails, username: e.target.value })} style={inputField} placeholder="Enter your user name" />
+                <input type="password" onChange={(e) => setLoginDetails({ ...loginDetails, password: e.target.value })} style={inputField} placeholder="Enter your password" />
+                <button style={loginBtn} onClick={login} >Login</button>
+                <p style={{ fontSize: "14px", fontWeight: 600, marginTop: "10px" }} >Don't have an account? <span onClick={() => navigate('/register/user')} style={{ cursor: "pointer", color: "blue", marginLeft: "4px", fontWeight: 800 }} >Signup</span></p>
             </div>
         </div>
     );
 }
+
+const loginLayout = { display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#fff", height: "100vh", width: "100%" }
+const innerbox = { display: "flex", flexDirection: "column", alignItems: "center", height: "350px", width: "350px", border: "1px solid lightgrey", borderRadius: "10px", backgroundColor: "#f6f6f6" }
+const inputField = { marginTop: "25px", height: "35px", width: "75%", border: "1px solid lightgrey", borderRadius: "8px", padding: "0px 10px", outline: 0 }
+const loginBtn = { marginTop: "25px", height: "35px", width: "75%", fontSize: "18px", fontWeight: 700, color: "#fff", backgroundColor: "#9304ab", borderRadius: "8px" }

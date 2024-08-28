@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import "../styles/SinglePageMiddle.css";
 import section3 from "../styles/av.png";
 import { useParams } from 'react-router-dom';
 import { FaStar } from "react-icons/fa";
-import { placesStore } from '../store/Store';
 import rev1 from "../styles/stars1.png";
 import rev2 from "../styles/stars2.png";
 import reviews from "../styles/rev.png";
 import modalPic from "../styles/pic.png";
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { commonActions } from '../redux/State';
 
 const SinglePageMiddle = () => {
     const { id } = useParams();
-    const placeClicked = placesStore.find((item) => item.id === id);
+    const {placesStore, selectedReviews, authToken} = useSelector(state => state.common);
+    const placeClicked = placesStore && placesStore?.find((item) => item.id === id);
     const { stars } = placeClicked || {};
+    const dispatch = useDispatch();
+
+    const getSelectedReviews = useCallback(async () => {
+        try {
+            const res = await axios.get('selectedPlace-reviews', {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+            if (res && res?.data) {
+                dispatch(commonActions.setSelectedReview({ selectedReviews: res?.data }));
+            }
+        } catch (err) {
+            toast.error(`Something went wrong: ${err?.response?.data?.message}`);
+        }
+    }, [authToken, dispatch]);
+
+
+    useEffect(() => {
+        getSelectedReviews()
+    }, [getSelectedReviews])
+
 
     return (
         <div>
@@ -95,22 +121,14 @@ const SinglePageMiddle = () => {
                             alt='Modal content'
                         />
                         <div className='modal-hold'>
-                            <h3 className="text-lg font-bold uppercase">~ Great stay</h3>
-                            <p className="py-4">We stayed in Horizon and in Hideout, and for me this one is one with more soul, river sound is stunning, chilling all day next to it is something special. It's more closed upstairs. But still lots of animals around you, so be prepared! Definitely nice experience. In quiet village, very nice to go with scooter around, to see real Bali, culture and people.</p>
-
-                            <h3 className="text-lg font-bold uppercase">~ Fantastic</h3>
-                            <p className="py-4">My partner and I had an amazing time here, such a pleasant retreat :) thank you! We loved the nature, the bamboo living life, and the epic shower in the jungle. They provided yoga mats on request which were really nice.</p>
-
-                            <h3 className="text-lg font-bold uppercase">~ Supperb experience</h3>
-                            <p className="py-4">The place was absolutely wonderful and everything we hoped it would be. Being outside with nature was so special to us. The staff were wonderful and friendly. The food was amazing!</p>
-
-                            <h3 className="text-lg font-bold uppercase">~ Great experience</h3>
-                            <p className="py-4">Our stay at Hideout Bali was amazing. We were thrilled with the cleanliness and beauty of the property. We were greeted on our first day by some monitor lizards and they were fantastic. Food was great. Thanks for an amazing stay!</p>
-
-                            <h3 className="text-lg font-bold uppercase">~ Awe Struck</h3>
-                            <p className="py-4">It was an exceptional experience, I brought my husband for a surprise trip on our honeymoon and he loved it. We did see a snake in the stream outside on our last day and I am happy about that if he witnessed anything of the sort on our first day we would have to leave with immediate effect!</p>
-
-                            {/* Repeat the review sections as needed */}
+                            {selectedReviews && selectedReviews?.length > 0 && selectedReviews.map((items, index) => {
+                                return (
+                                    <React.Fragment key={index} >
+                                        <h3 className="text-lg font-bold uppercase">~ {items?.header}</h3>
+                                        <p className="py-4">{items?.content}</p>                                    
+                                    </React.Fragment>
+                                )
+                            })}
                         </div>
                     </label>
                 </label>

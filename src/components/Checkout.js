@@ -1,22 +1,22 @@
-import { placesStore } from '../store/Store'
 import { useParams } from 'react-router-dom';
 import "../styles/Checkout.css"
 import PaymentForm from './PaymentForm';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Checkout = (props) => {
 
   const params = useParams();
+  const {placesStore} = useSelector(state => state.common)
   const { id } = params;
 
   let daysSelected = params;
 
   let daysFinal = daysSelected.days;
 
-  const checkoutPagePlace = placesStore.find((item) => item.id === id)
+  const checkoutPagePlace = placesStore && placesStore?.find((item) => item.id === id)
 
   const { name, homeMainPic, price, stars } = checkoutPagePlace || {}
-
 
   return (
     <div className='checkout-parent'>
@@ -34,13 +34,13 @@ const Checkout = (props) => {
 
         <p className='checkout-start-price font-semibold'>${price}</p>
 
-        <p className='checkout-line1 text-gray-300 whitespace-nowrap'>____________________________________________________________</p>
+        <p className='checkout-line1 text-gray-300 whitespace-nowrap'>_______________________________________________</p>
 
-        <p className='absolute uppercase italic checkout-protected font-semibold'>Your booking is protected by</p>
+        <p className='absolute uppercase italic checkout-protected '>Your booking is protected by</p>
 
         <img alt='sdf' src='https://a0.muscache.com/pictures/aircover/aircover-logo/original/56683a2f-f11b-43f6-8af7-a1b3861b2c85.svg' className='checkout-logo absolute w-32 left-12' />
 
-        <p className='checkout-line2 text-gray-300 whitespace-nowrap'>____________________________________________________________</p>
+        <p className='checkout-line2 text-gray-300 whitespace-nowrap'>_______________________________________________</p>
 
         <p className='absolute text-xl font-semibold checkout-price-heading'>price details</p>
 
@@ -64,7 +64,7 @@ const Checkout = (props) => {
 
         </div>
 
-        <p className='checkout-line3 text-gray-300 whitespace-nowrap'>____________________________________________________________</p>
+        <p className='checkout-line3 text-gray-300 whitespace-nowrap'>_______________________________________________</p>
         <p className='checkout-toal-heading font-semibold absolute text-xl'>TOTAL</p>
 
         <p className='absolute total-checkout'>${240 + 65 + (price * daysFinal)}</p>
@@ -74,7 +74,7 @@ const Checkout = (props) => {
 
       </div>
 
-      <PaymentForm amount={price} days={daysFinal} place={name} />
+      <PaymentForm placeId={id} amount={price} days={daysFinal} place={name} />
 
     </div>
   )

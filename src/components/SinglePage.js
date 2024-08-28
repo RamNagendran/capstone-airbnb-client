@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { placesStore } from '../store/Store';
 import "../styles/SinglePage.css";
 import { FaStar, FaKey, FaCalendarCheck } from "react-icons/fa";
 import { RiMedal2Fill } from "react-icons/ri";
@@ -9,27 +8,26 @@ import SinglePageMiddle from './SinglePageMiddle';
 import Footer1 from './Footer1';
 import Footer2 from './Footer2';
 import "../styles/Tabs.css";
+import { useSelector } from 'react-redux';
 
 const SinglePage = () => {
-    const [buttonOpen, setButtonOpen] = useState(false);
-    const [buttonClose, setButtonClose] = useState(true);
+    const [calendarOpen, setCalendarOpen] = useState(false);
+    const {placesStore} = useSelector(state => state.common);
 
     const buttonOpenHandler = (event) => {
         event.preventDefault();
-        setButtonOpen(true);
-        setButtonClose(false);
+        setCalendarOpen(true);
     };
 
     const buttonCloseHandler = (event) => {
         event.preventDefault();
-        setButtonClose(false);
-        setButtonOpen(false);
+        setCalendarOpen(false);
     };
 
     const params = useParams();
     const { id } = params;
 
-    const placeClicked = placesStore.find((item) => item.id === id);
+    const placeClicked = placesStore && placesStore?.find((item) => item.id === id);
 
     const { name, price, stars, carouselPic1, carouselPic2, carouselPic3, carouselPic4, carouselPic5 } = placeClicked || {};
 
@@ -140,8 +138,8 @@ const SinglePage = () => {
                     placesId={id}
                     placesNam={name}
                     placesPic={carouselPic1}
-                    buttonopenState={buttonOpen}
-                    buttonCloseState={buttonClose}
+                    buttonopenState={calendarOpen}
+                    buttonCloseState={!calendarOpen}
                     closeFunc={buttonCloseHandler}
                 />
             </div>

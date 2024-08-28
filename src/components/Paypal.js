@@ -2,21 +2,80 @@ import React from 'react'
 import "../styles/Paypal.css";
 import paypalbg from "../styles/paypalbg.png"
 import paypalCard from "../styles/paypal-bgg.png"
-import { PayPalButtons } from '@paypal/react-paypal-js';
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import {  useNavigate } from 'react-router-dom';
+import { commonActions } from '../redux/State';
 
 
 const Paypal = (props) => {
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { userDetails, authToken, bookedDates } = useSelector(state => state.common)
     let placesName = props.nameOfPlace;
     let price1 = props.initialPrice;
     let numOfDays = props.daysSelected;
+    const totalPrice = (price1 * numOfDays) + 240 + 65
+    const confirmation_no = `${Math.floor(Math.random() * (999 - 100 + 1) + 100)}ABKQ`
+
+    
+    async function bookSlot() {
+        let data = {
+            username: userDetails.username,
+            user_id: userDetails.id,
+            place_id: props.placeId,
+            dates: {
+                startDate: bookedDates.startDate,
+                endDate: bookedDates.endDate,
+                days: numOfDays,
+            },
+            total_amount: totalPrice,
+            issuer: 'Fairbnb',
+            confirmation_no,
+            receiptfor: placesName
+        }
+        try {
+            const res = await axios.post('book-slot', data, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                }
+            })
+            if (res && res?.data && res?.data?.acknowledged) {
+                toast.success('Slot booked successfully!!', {
+                    hideProgressBar: true
+                })
+                fetchBookedSlots()
+                navigate(`/`)
+            }
+        } catch (e) {
+            toast.error(`something went wrong : ${e?.response?.data?.message}`, {
+                hideProgressBar: true
+            })
+        }
+    }
+
+    async function fetchBookedSlots() {
+        try {
+          const res = await axios.get('get-bookedSlots', {
+            headers: {
+              Authorization: `Bearer ${authToken}`
+            }
+          })
+          if (res && res?.data) {
+            dispatch(commonActions.setBookedSlots({bookedSlots: res.data}))
+          }
+        } catch (e) {
+          toast.error("Error fetching reviews, try again later!!", {
+            hideProgressBar: true
+          })
+        }
+      }
+
 
 
     return (
         <div className='pa'>
-
-
             <div className='paypalbghold hidden lg:block'>
                 <img alt='adsf' src={paypalbg} className="paypalbg" />
             </div>
@@ -25,8 +84,6 @@ const Paypal = (props) => {
                 <img alt='adsf' src={paypalCard} className="paypalcard" />
 
             </div>
-
-            {/* side bar */}
 
             <div className='figure-hold3'>
                 <p className='val'> ${price1}  </p>
@@ -46,16 +103,12 @@ const Paypal = (props) => {
             </div>
 
             <div className='confirmnum'>
-                <p>{Math.floor(Math.random() * (999 - 100 + 1) + 100)}ABKQ</p>
+                <p>{confirmation_no}</p>
             </div>
 
             <div className='paypalLogo2'>
                 <img alt='adsf' src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/553128/PayPal.svg' />
             </div>
-
-
-
-            {   /*  main card */}
 
             <div className='stayAt2'>
                 <p>Stay At {placesName}</p>
@@ -63,44 +116,15 @@ const Paypal = (props) => {
 
             <div className='totalCard2 flex gap-4 bg-white font-semibold'>
                 <p>TOTAL</p>
-                <p>${(price1 * numOfDays) + 240 + 65}</p>
+                <p>${totalPrice}</p>
             </div>
 
-            <div className="hello2 flex flex-col absolute gap-3 bg-white italic  text-lg">
-                <p>Hello Jamie</p>
+            <div className="hello2 flex flex-col justify-between absolute gap-3 bg-white italic  text-lg">
+                <p>Hello {userDetails?.username}</p>
 
-                <p>You Are About To Pay ${(price1 * numOfDays) + 240 + 65}</p>
+                <p>You Are About To Pay ${totalPrice}</p>
+                <button  onClick={bookSlot} style={{ height: "35px", width: "75%", fontSize: "18px", fontWeight: 700, color: "#fff", backgroundColor: "#9304ab", borderRadius: "8px", outline: 0 }} >Book your slot</button>
             </div>
-
-            <div className='confirmHold2 absolute outline-none border-none'>
-
-
-                <PayPalScriptProvider>
-                    <PayPalButtons aria-label='BUY WITH PAYPAL' createOrder={(data, actions) => {
-                        return actions.order.create({
-                            purchase_units: [
-                                {
-                                    amount: {
-                                        value: price1,
-                                    },
-                                },
-                            ],
-                        });
-                    }}>
-
-                    </PayPalButtons>
-                </PayPalScriptProvider>
-            </div>
-
-            <div className='whiteover'>
-
-            </div>
-
-            <br />
-            <br />
-            <br />
-
-
         </div>
     )
 }

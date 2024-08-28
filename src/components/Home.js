@@ -1,21 +1,26 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import "../styles/Home.css";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { useState } from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { AiOutlineSearch } from "react-icons/ai"
-import { Link } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import CalendarNavBar from './CalendarNavBar';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { counterActions } from '../redux/State';
 import { AiOutlinePlusCircle } from "react-icons/ai"
 import { AiOutlineMinusCircle } from "react-icons/ai"
 import Select from 'react-select';
 import { IoLocationOutline } from "react-icons/io5";
+import { commonActions } from '../redux/State';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const Home = ({ toggle, setToggle }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const { userDetails, placesArray, authToken } = useSelector(state => state.common)
   const [inputValue, setInputeValue] = useState("");
 
   const [linkClickedVlaue, setLinkClickedValue] = useState("");
@@ -26,23 +31,7 @@ const Home = ({ toggle, setToggle }) => {
 
   let [infants, setInfants] = useState(0);
 
-
-  const userimage = "";
-
-
-
-  const adultsQuantity = useSelector((state) => state.counter.value);
-
-  const dispacth = useDispatch();
-
-  const increaeHandler = () => {
-    dispacth(counterActions.increaseCount());
-  }
-
-
-  const decreaseHandler = () => {
-    dispacth(counterActions.decrementCount());
-  }
+  const [enableLogout, setEnableLogout] = useState(false);
 
   const inputValueHandler = (e) => {
     setInputeValue(e.target.value);
@@ -80,71 +69,76 @@ const Home = ({ toggle, setToggle }) => {
   }
 
 
+  function onUserclick() {
+    if (!enableLogout) {
+      if (userDetails && userDetails?.username && userDetails?.email) {
+        setEnableLogout(true)
+      } else {
+        navigate('/login')
+      }
+    } else {
+      setEnableLogout(false);
+    }
+  }
 
-  const placesArray = [
-    {
-      id: "1",
-      place: "london"
-    },
-    {
-      id: "2",
-      place: "russia"
-    },
-    {
-      id: "3",
-      place: "spain"
-    },
-    {
-      id: "4",
-      place: "brazil"
-    },
-    {
-      id: "5",
-      place: "india"
-    },
-    {
-      id: "6",
-      place: "france"
-    },
+  function logout() {
+    dispatch(commonActions.logout())
+    toast.success('Logged out successfully', {
+      hideProgressBar: true
+    })
+    setEnableLogout(false);
+    navigate('/')
+  }
 
-    {
-      id: "9",
-      place: "italy"
-    },
-    {
-      id: "10",
-      place: "australia"
-    },
-    {
-      id: "11",
-      place: "canada"
-    },
-    {
-      id: "12",
-      place: "spain"
-    },
-    {
-      id: "13",
-      place: "usa"
-    },
-    {
-      id: "14",
-      place: "kyiv"
-    },
-    {
-      id: "15",
-      place: "ukraine"
-    },
-    {
-      id: "16",
-      place: "newyork"
-    },
-    {
-      id: "17",
-      place: "europe"
-    },
+  const fetchAll = useCallback(async() => {
+    try {
+      const res = await axios.get('get-places')
+      if (res && res?.data) {
+        dispatch(commonActions.setPlaces({ placesStore: res.data.placestore, placesArray: res.data.placesArray }))
+      }
+    } catch (e) {
+      toast.error("Error fetching places, try again later!!", {
+        hideProgressBar: true
+      })
+    }
 
-  ]
+    try {
+      const res = await axios.get('get-reviews', {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      })
+      if (res && res?.data) {
+        dispatch(commonActions.setReviews({ reviewesArr: res?.data[0]?.reviewes }))
+      }
+    } catch (e) {
+      toast.error("Error fetching reviews, try again later!!", {
+        hideProgressBar: true
+      })
+    }
+
+    try {
+      const res = await axios.get('get-bookedSlots', {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      })
+      if (res && res?.data) {
+        dispatch(commonActions.setBookedSlots({ bookedSlots: res.data }))
+      }
+    } catch (e) {
+      toast.error("Error fetching reviews, try again later!!", {
+        hideProgressBar: true
+      })
+    }    
+  }, [authToken, dispatch]);
+
+
+
+// eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(() => {
+  fetchAll();
+}, [fetchAll]);
 
 
   return (
@@ -246,7 +240,7 @@ const Home = ({ toggle, setToggle }) => {
                               <div className='serachResultsHold'>
                                 <p className=' fof text-xl text-center mt-3'> MOST TRAVELLED PLACES </p>
                                 <div className=' flex flex-row flex-wrap searchDisplayParent'>
-                                  {placesArray.filter((item) => {
+                                  {placesArray && placesArray?.filter((item) => {
 
                                     if (inputValue === "") {
                                       return ""
@@ -305,20 +299,19 @@ const Home = ({ toggle, setToggle }) => {
                             </div>
 
                             <div className='btnControlsPlus flex flex-col relative'>
-                              <AiOutlinePlusCircle className='fss' onClick={increaeHandler} />
+                              <AiOutlinePlusCircle className='fss' onClick={() => { }} />
                               <AiOutlinePlusCircle className='fss' onClick={childrenAdd} />
                               <AiOutlinePlusCircle className='fss' onClick={infantsAdd} />
                             </div>
 
                             <div className='btnControlMinus flex flex-col relative cursor-pointer' id='btnmin'>
-                              <AiOutlineMinusCircle className='fss' onClick={decreaseHandler} />
+                              <AiOutlineMinusCircle className='fss' onClick={() => { }} />
                               <AiOutlineMinusCircle className='fss' onClick={childrenLess} />
                               <AiOutlineMinusCircle className='fss' onClick={infantsLess} />
 
                             </div>
 
                             <div className='navQtyHold relative'>
-                              <p className=' w-3'> {adultsQuantity} </p>
                               <p className=' w-3'> {children}</p>
                               <p className=' w-3'>{infants} </p>
                             </div>
@@ -355,25 +348,28 @@ const Home = ({ toggle, setToggle }) => {
           <div className="flex justify-end items-center relative">
             <div className="flex mr-4 items-center">
               <div className="inline-block py-2 px-3 hover:bg-gray-200 rounded-full" href="#">
-                <div className="flex items-center relative cursor-pointer whitespace-nowrap">Become a host</div>
+                <div onClick={() => navigate('/booked-slots')} className="flex items-center relative cursor-pointer whitespace-nowrap">Booked Slots</div>
               </div>
             </div>
             <div className="block">
               <div className="inline relative">
-                {<button type="button" className="inline-flex items-center relative px-2 border rounded-full hover:shadow-lg">
-                  {userimage.length > 2 ? <img alt='dff' src={userimage} className="UserLoginImage ml-5" /> : <div className="block flex-grow-0 flex-shrink-0 h-10 w-12 pl-5">
+                {<button onClick={() => onUserclick()} type="button" className="inline-flex items-center relative px-2 border rounded-full hover:shadow-lg">
+                  {<div className="block flex-grow-0 flex-shrink-0 h-10 w-12 pl-5">
                     <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation" focusable="false" style={{ display: 'block', height: '100%', width: '100%', fill: 'currentcolor' }}>
                       <path d="m16 .7c-8.437 0-15.3 6.863-15.3 15.3s6.863 15.3 15.3 15.3 15.3-6.863 15.3-15.3-6.863-15.3-15.3-15.3zm0 28c-4.021 0-7.605-1.884-9.933-4.81a12.425 12.425 0 0 1 6.451-4.4 6.507 6.507 0 0 1 -3.018-5.49c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5a6.513 6.513 0 0 1 -3.019 5.491 12.42 12.42 0 0 1 6.452 4.4c-2.328 2.925-5.912 4.809-9.933 4.809z" />
                     </svg>
                   </div>}
                 </button>}
-
+                {enableLogout && <div onClick={logout} style={{ cursor: "pointer", height: "45px", width: "200px", position: 'absolute', right: "14px", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid lightgrey", borderRadius: "10px", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}  >
+                  Logout
+                </div>}
               </div>
             </div>
           </div>
         </div>
         {/* end login */}
       </nav >
+      <Outlet />
 
     </div >
   )
