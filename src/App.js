@@ -16,7 +16,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BookedSlots from './components/bookedSlots';
 
-axios.defaults.baseURL = 'http://localhost:4000/api/v1';
+axios.defaults.baseURL = 'https://capstone-airbnb-server.onrender.com/api/v1';
 
 function App() {
   const [open, setOpen] = useState(false);
